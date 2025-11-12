@@ -1,4 +1,5 @@
 'use strict';
+const BASE_URL = "http://mrazzoli.pythonanywhere.com/api/v1/jokes";
 
 async function loadjokes() {
     const langSelect = document.getElementById("selLang");
@@ -13,7 +14,7 @@ async function loadjokes() {
 
 
     if (joke_id > 0) {
-        await fetch(`http://127.0.0.1:5000/api/v1/jokes/${joke_id}`)
+        await fetch(`${BASE_URL}/${joke_id}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -35,7 +36,7 @@ async function loadjokes() {
             });
     }
     else if (lang !== "" && category !== "" && number == "all") {
-        await fetch(`http://127.0.0.1:5000/api/v1/jokes/${lang}/${category}/all`)
+        await fetch(`${BASE_URL}/${lang}/${category}/all`)
             .then(response => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
@@ -58,7 +59,7 @@ async function loadjokes() {
                     });
             }
     else if (lang !== "" && category !== "" && number > 0) {
-            await fetch(`http://127.0.0.1:5000/api/v1/jokes/${lang}/${category}/${number}`)
+            await fetch(`${BASE_URL}/${lang}/${category}/${number}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
