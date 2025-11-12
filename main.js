@@ -1,0 +1,85 @@
+'use strict';
+
+async function loadjokes() {
+    const langSelect = document.getElementById("selLang");
+    const categorySelect = document.getElementById("selCat");
+    const numberInput = document.getElementById("selNum");
+    const idInput = document.getElementById("jokeId");
+
+    let lang = langSelect.value;
+    let category = categorySelect.value;
+    let number = numberInput.value;
+    let joke_id = idInput.value;
+
+
+    if (joke_id > 0) {
+        await fetch(`http://127.0.0.1:5000/api/v1/jokes/${joke_id}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                const jokeDisplay = document.getElementById("jokes");
+                jokeDisplay.innerHTML = `
+                <div class="box has-background-light mt-4">
+                    <p class="has-text-weight-semibold">${data.text}</p>
+                </div>
+                `;
+            })
+            .catch(error => {
+                console.error('Error fetching joke:', error);
+                const jokeDisplay = document.getElementById("jokes");
+                jokeDisplay.innerHTML = `< p > Error loading joke.Please try again.</p > `;
+            });
+    }
+    else if (lang !== "" && category !== "" && number == "all") {
+        await fetch(`http://127.0.0.1:5000/api/v1/jokes/${lang}/${category}/all`)
+            .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                    .then(data => {
+                        const jokeDisplay = document.getElementById("jokes");
+                        jokeDisplay.innerHTML = data
+                            .map(joke => `
+                                <div class="box has-background-light mt-3">
+                                    <p class="has-text-centered has-text-weight-medium">${joke.text}</p>
+                                </div>`)
+                            .join("");
+                    })
+                    .catch(error => {
+                        console.error('Error fetching jokes:', error);
+                        const jokeDisplay = document.getElementById("jokes");
+                        jokeDisplay.innerHTML = `<p>Error loading jokes. Please try again.</p>`;
+                    });
+            }
+    else if (lang !== "" && category !== "" && number > 0) {
+            await fetch(`http://127.0.0.1:5000/api/v1/jokes/${lang}/${category}/${number}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const jokeDisplay = document.getElementById("jokes");
+                    const limitedJokes = data.slice(0, number);
+
+                    jokeDisplay.innerHTML = limitedJokes
+                        .map(joke => `
+                            <div class="box has-background-light mt-3">
+                                <p class="has-text-centered has-text-weight-medium">${joke.text}</p>
+                            </div>`)
+                        .join("");
+                })
+                .catch(error => {
+                    console.error('Error fetching jokes:', error);
+                    const jokeDisplay = document.getElementById("jokes");
+                    jokeDisplay.innerHTML = `<p>Error loading jokes. Please try again.</p>`;
+                });
+        }
+    }
