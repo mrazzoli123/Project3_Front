@@ -25,7 +25,7 @@ async function loadjokes() {
                 const jokeDisplay = document.getElementById("jokes");
                 jokeDisplay.innerHTML = `
                 <div class="box has-background-light mt-4">
-                    <p class="has-text-weight-semibold">${data.text}</p>
+                    <p class="has-text-weight-semibold">${data.joke}</p>
                 </div>
                 `;
             })
@@ -45,10 +45,10 @@ async function loadjokes() {
                 })
                     .then(data => {
                         const jokeDisplay = document.getElementById("jokes");
-                        jokeDisplay.innerHTML = data
+                        jokeDisplay.innerHTML = data.jokes
                             .map(joke => `
                                 <div class="box has-background-light mt-3">
-                                    <p class="has-text-centered has-text-weight-medium">${joke.text}</p>
+                                    <p class="has-text-centered has-text-weight-medium">${joke}</p>
                                 </div>`)
                             .join("");
                     })
@@ -68,12 +68,11 @@ async function loadjokes() {
                 })
                 .then(data => {
                     const jokeDisplay = document.getElementById("jokes");
-                    const limitedJokes = data.slice(0, number);
 
-                    jokeDisplay.innerHTML = limitedJokes
+                    jokeDisplay.innerHTML = data.jokes
                         .map(joke => `
                             <div class="box has-background-light mt-3">
-                                <p class="has-text-centered has-text-weight-medium">${joke.text}</p>
+                                <p class="has-text-centered has-text-weight-medium">${joke}</p>
                             </div>`)
                         .join("");
                 })
