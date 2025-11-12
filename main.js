@@ -1,5 +1,5 @@
 'use strict';
-const BASE_URL = "http://mrazzoli.pythonanywhere.com/api/v1/jokes";
+const BASE_URL = "https://mrazzoli.pythonanywhere.com/api/v1/jokes";
 
 async function loadjokes() {
     const langSelect = document.getElementById("selLang");
