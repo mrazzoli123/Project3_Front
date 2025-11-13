@@ -15,9 +15,10 @@ async function loadjokes() {
 
     if (joke_id > 0) {
         await fetch(`${BASE_URL}/${joke_id}`)
-            .then(response => {
+            .then(async response => {
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    const errorText = await response.text();
+                    throw new Error(errorText || `Error ${response.status}`);
                 }
                 return response.json();
             })
@@ -30,9 +31,9 @@ async function loadjokes() {
                 `;
             })
             .catch(error => {
-                console.error('Error fetching joke:', error);
                 const jokeDisplay = document.getElementById("jokes");
-                jokeDisplay.innerHTML = `< p > Error loading joke.Please try again.</p > `;
+                console.error('Error fetching joke:', error);
+                jokeDisplay.innerHTML = `<p class="has-text-danger">${error.message}</p>`;
             });
     }
     else if (lang !== "" && category !== "" && number == "all") {
